@@ -12,86 +12,60 @@
     <?php
     include 'partials/_header.php';
     ?>
+
+    <?php include 'partials/_dbconnect.php' ?>
+    <!-- Slider starts here -->
     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-  <div class="carousel-indicators">
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-  </div>
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img src="https://source.unsplash.com/2400x600/?apple,code" class="d-block w-100" alt="...">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="https://source.unsplash.com/2400x600/?apple,code" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="https://source.unsplash.com/2400x600/?programmer,microsoft" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="https://source.unsplash.com/2400x600/?coding,javascript" class="d-block w-100" alt="...">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
-    <div class="carousel-item">
-      <img src="https://source.unsplash.com/2400x600/?programmer,microsoft" class="d-block w-100" alt="...">
-    </div>
-    <div class="carousel-item">
-      <img src="https://source.unsplash.com/2400x600/?coding,javascript" class="d-block w-100" alt="...">
-    </div>
-  </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
-</div>
+
+    <!-- Category container starts here -->
     <div class="container my-3">
         <h4 class="text-center">iDiscuss - Browser Categories</h4>
         <div class="row">
+            <!-- Fetch all the categories -->
             <!-- Use a for loop to iterate through categories -->
-            <div class="col-md-4">
-                <div class="card my-3" style="width: 20rem;">
-                    <img src="https://source.unsplash.com/500x400/?coding,python" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="btn btn-primary">View Threads</a>
-                    </div>
-                </div>
+            <?php
+            $sql = "SELECT * FROM `categories`";
+    $result = mysqli_query($conn, $sql);
+    while ($row = mysqli_fetch_assoc($result)) {
+        $cat = $row['category_name'];
+        $cat_desc = $row['category_description'];
+        echo '<div class="col-md-4">
+        <div class="card my-3" style="width: 20rem;">
+            <img src="https://source.unsplash.com/500x400/?'.$cat.'" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">'.$cat.'</h5>
+                <p class="card-text">'.substr($cat_desc, 0, 100).'...</p>
+                <a href="#" class="btn btn-primary">View Threads</a>
             </div>
-            <div class="col-md-4">
-                <div class="card my-3" style="width: 20rem;">
-                    <img src="https://source.unsplash.com/500x400/?coding,python" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="btn btn-primary">View Threads</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card my-3" style="width: 20rem;">
-                    <img src="https://source.unsplash.com/500x400/?coding,python" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="btn btn-primary">View Threads</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card my-3" style="width: 20rem;">
-                    <img src="https://source.unsplash.com/500x400/?coding,python" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="btn btn-primary">View Threads</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card my-3" style="width: 20rem;">
-                    <img src="https://source.unsplash.com/500x400/?coding,python" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="btn btn-primary">View Threads</a>
-                    </div>
-                </div>
-            </div>
+        </div>
+    </div>';
+    }
+    ?>
         </div>
     </div>
 
