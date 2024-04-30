@@ -1,5 +1,6 @@
 <?php
 
+session_start();
 echo ' <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="/codewithharry/Forums-Php">iDiscuss</a>
@@ -28,19 +29,39 @@ echo ' <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
           <li class="nav-item">
             <a class="nav-link" href="contact.php" >Contact</a>
           </li>
-        </ul>
-       
-        <form class="d-flex">
+        </ul>';
+if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
+    echo '<form class="d-flex">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-light" type="submit">Search</button>
+          <span class="text-white mx-3">Welcome '.$_SESSION['email'].'</span>
+          <button class="btn btn-success">Logout</button>
+        </form>';
+} else {
+    echo '<form class="d-flex">
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-light" type="submit">Search</button>
         </form>
         <div class="mx-2 text-center my-2">
             <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#signUpModal">Sign Up</button>
-        </div>
-    </div>
+        </div>';
+}
+
+echo '</div>
     </div>
   </nav>';
 
 include 'partials/_loginModal.php';
 include 'partials/_signupModal.php';
+if(isset($_GET['signupsuccess']) && $_GET['signupsuccess'] == "true") {
+    echo '<div class="alert alert-success" role="alert">
+    You can now login!
+  </div>';
+}
+
+if(isset($_GET['signupsuccess']) && $_GET['signupsuccess'] == "false") {
+    echo '<div class="alert alert-danger" role="alert">
+     Error!!!
+</div>';
+}

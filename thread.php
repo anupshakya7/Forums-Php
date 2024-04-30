@@ -24,11 +24,42 @@
         $id = $_GET['threadid'];
     $sql = "SELECT * FROM `threads` WHERE thread_id=".$id."";
     $result = mysqli_query($conn, $sql);
+    $noResult = true;
     while($row = mysqli_fetch_assoc($result)) {
+        $noResult = false;
         $title = $row['thread_title'];
         $desc = $row['thread_desc'];
     }
+
+    if($noResult) {
+        echo '<div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <p class="lead">Be the first person to ask a question</p>
+        </div>
+    </div>';
+        echo var_dump($noResult);
+    }
     ?>
+
+<?php
+    $showAlert = false;
+    $method = $_SERVER['REQUEST_METHOD'];
+    if ($method == 'POST') {
+        //Insert into comment db
+        $comment = $_POST['comment'];
+
+        $sql = "INSERT INTO `comments` (`comment_content`, `thread_id`, `comment_by`, `comment_created`) VALUES ('$comment', '$id', '0', current_timestamp())";
+        $result = mysqli_query($conn, $sql);
+        $showAlert = true;
+    }
+
+    if ($showAlert) {
+        echo '<div class="alert alert-success" role="alert">
+        Your Comment has been Added! Please wait for community to respond
+      </div>';
+    }
+    ?>
+    
     <!-- Category container starts here -->
     <div class="container my-3" id="ques">
         <div class="jumbotron">
@@ -38,7 +69,51 @@
             <p>This is a peer to peer forum for sharing knowledge with each other Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis neque corrupti quis accusamus nesciunt velit odio eveniet eius quasi soluta fugiat, doloremque, repellat consequatur aspernatur praesentium quisquam ipsam itaque modi.</p>
             <p><b>Posted By: Harry</b></p>
         </div>
-        <h3 class="mt-4">Discussion</h3>
+        <div class="container">
+            <h1 class="py-2">Post a Comment</h1>
+            <form action="<?php echo $_SERVER['REQUEST_URI'] ?>" method="POST" class="card p-3">
+                <div class="mb-3">
+                    <label for="desc" class="form-label">Type your comment</label>
+                    <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-success">Post Comment</button>
+            </form>
+        </div>
+
+        <div class="container" id="ques">
+            <h1 class="py-2">Descussion</h1>
+            <?php
+                 $id = $_GET['threadid'];
+    $sql = "SELECT * FROM `comments` WHERE thread_id=" . $id . "";
+    $result = mysqli_query($conn, $sql);
+    $noResult = true;
+
+    while ($row = mysqli_fetch_assoc($result)) {
+        $noResult = false;
+        $id = $row['comment_id'];
+        $content = $row['comment_content'];
+        $comment_time = $row['comment_created'];
+
+        echo '<div class="d-flex my-4">
+                     <div class="flex-shrink-0">
+                         <img src="images/userDefault.png" alt="..." width="44px" height="44px">
+                     </div>
+                     <div class="flex-grow-1 ms-3">
+                     <p class="font-weight-bold my-0">Anonymous User at '.$comment_time.'</p>
+                         ' . $content . '
+                     </div>
+                 </div>
+                 <hr>';
+    }
+    if ($noResult) {
+        echo '<div class="jumbotron jumbotron-fluid">
+                         <div class="container">
+                             <p class="lead">Be the first person to write a comment</p>
+                         </div>
+                     </div>';
+    }
+    ?>
+        </div>
     </div>
 
     <?php
