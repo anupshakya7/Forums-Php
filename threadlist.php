@@ -35,9 +35,18 @@
     if ($method == 'POST') {
         //Insert into thread into db
         $th_title = $_POST['title'];
+
+        $th_title = str_replace('<', '&lt;', $th_title);
+        $th_title = str_replace('>', '&gt;', $th_title);
+
         $th_desc = $_POST['desc'];
 
-        $sql = "INSERT INTO `threads` (`thread_title`, `thread_desc`, `thread_cat_id`, `thread_user_id`, `created`) VALUES ('$th_title', '$th_desc', '$id', '0', current_timestamp())";
+        $th_desc = str_replace('<', '&lt;', $th_desc);
+        $th_desc = str_replace('>', '&gt;', $th_desc);
+
+        $userId = $_POST['sno'];
+
+        $sql = "INSERT INTO `threads` (`thread_title`, `thread_desc`, `thread_cat_id`, `thread_user_id`, `created`) VALUES ('$th_title', '$th_desc', '$id', '$userId', current_timestamp())";
         $result = mysqli_query($conn, $sql);
         $showAlert = true;
     }
@@ -58,9 +67,12 @@
             <p>This is a peer to peer forum for sharing knowledge with each other Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis neque corrupti quis accusamus nesciunt velit odio eveniet eius quasi soluta fugiat, doloremque, repellat consequatur aspernatur praesentium quisquam ipsam itaque modi.</p>
             <button class="btn btn-success">Learn More</button>
         </div>
-        <div class="container">
+        <?php
+        if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
+            echo '<div class="container">
             <h1 class="py-2">Start a Discussion</h1>
-            <form action="<?php echo $_SERVER['REQUEST_URI'] ?>" method="POST" class="card p-3">
+            <form action="'.$_SERVER['REQUEST_URI'].'" method="POST" class="card p-3">
+                <input type="hidden" name="sno" value="'.$_SESSION['user_id'].'">
                 <div class="mb-3">
                     <label for="problem_title" class="form-label">Problem Title</label>
                     <input type="text" class="form-control" id="problem_title" name="title" aria-describedby="problem_title_hint">
@@ -76,10 +88,15 @@
                 </div>
                 <button type="submit" class="btn btn-success">Submit</button>
             </form>
-        </div>
+        </div>';
+        } else {
+            echo "<h4 class='mt-4'>You are logged in. Please login to be able to start a Discussion</h4>";
+        }
+    ?>
+    
         <h1 class="py-2 mt-4">Browser Question</h1>
         <?php
-        $id = $_GET['catid'];
+    $id = $_GET['catid'];
     $sql = "SELECT * FROM `threads` WHERE thread_cat_id=" . $id . "";
     $result = mysqli_query($conn, $sql);
     $noResult = true;
@@ -88,17 +105,25 @@
         $noResult = false;
         $title = $row['thread_title'];
         $desc = $row['thread_desc'];
+
         $id = $row['thread_id'];
         $thread_time = $row['created'];
+        $thread_user_id = $row['thread_user_id'];
+
+        $sql2 = "SELECT email FROM `users` WHERE sno='$thread_user_id'";
+        $result2 = mysqli_query($conn, $sql2);
+        $row2 = mysqli_fetch_assoc($result2);
+
+
 
         echo '<div class="d-flex my-4">
         <div class="flex-shrink-0">
             <img src="images/userDefault.png" alt="..." width="44px" height="44px">
         </div>
         <div class="flex-grow-1 ms-3">
-        <p class="font-weight-bold my-0">Anonymous User at '.$thread_time.'</p>
             <h5 class="mt-0"><a class="text-dark" href="thread.php?threadid=' . $id . '">' . $title . '</a></h5>
             ' . $desc . '
+            <p class="font-weight-bold my-0"><b>Added By: '.$row2['email'].'</b> at '.$thread_time.'</p>
         </div>
     </div>
     <hr>';

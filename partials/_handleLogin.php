@@ -14,9 +14,13 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
         if(password_verify($password, $row['password'])) {
             session_start();
             $_SESSION['loggedIn'] = true;
+            $_SESSION['user_id'] = $row['sno'];
             $_SESSION['email'] = $email;
             echo "Logged In".$email;
         }
         header('location: /codewithharry/Forums-Php/index.php');
+    } else {
+        header('location: /codewithharry/Forums-Php/index.php?success=false&error=Cannot Login');
     }
+
 }
