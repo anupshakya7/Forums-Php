@@ -14,11 +14,10 @@
 </head>
 
 <body>
-    <?php
-    include 'partials/_header.php';
-    ?>
+<?php include 'partials/_dbconnect.php' ?>
+<?php include 'partials/_header.php'; ?>
 
-    <?php include 'partials/_dbconnect.php' ?>
+    
     <!-- Slider starts here -->
     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-indicators">
@@ -54,13 +53,13 @@
             <!-- Fetch all the categories -->
             <!-- Use a for loop to iterate through categories -->
             <?php
-            $sql = "SELECT * FROM `categories`";
-    $result = mysqli_query($conn, $sql);
-    while ($row = mysqli_fetch_assoc($result)) {
-        $id = $row['category_id'];
-        $cat = $row['category_name'];
-        $cat_desc = $row['category_description'];
-        echo '<div class="col-md-4">
+        $sql = "SELECT * FROM `categories`";
+$result = mysqli_query($conn, $sql);
+while ($row = mysqli_fetch_assoc($result)) {
+    $id = $row['category_id'];
+    $cat = $row['category_name'];
+    $cat_desc = $row['category_description'];
+    echo '<div class="col-md-4">
         <div class="card my-3" style="width: 20rem;">
             <img src="https://source.unsplash.com/500x400/?'.$cat.'" class="card-img-top" alt="Images for Category">
             <div class="card-body">
@@ -70,14 +69,14 @@
             </div>
         </div>
     </div>';
-    }
-    ?>
+}
+?>
         </div>
     </div>
 
     <?php
-    include 'partials/_footer.php';
-    ?>
+include 'partials/_footer.php';
+?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 

@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+
 echo ' <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="/codewithharry/Forums-Php">iDiscuss</a>
@@ -17,22 +18,23 @@ echo ' <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Category
+              Top Categories
             </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">';
+$sql = "SELECT  category_id,category_name FROM `categories` LIMIT 3";
+$result = mysqli_query($conn, $sql);
+while($row = mysqli_fetch_assoc($result)) {
+    echo '<li><a class="dropdown-item" href="/codewithharry/Forums-Php/threadlist.php?catid='.$row['category_id'].'">'.$row['category_name'].'</a></li>';
+}
+echo '</ul>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="contact.php" >Contact</a>
           </li>
         </ul>';
 if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
-    echo '<form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+    echo '<form class="d-flex" action="/codewithharry/Forums-Php/search.php" method="GET">
+          <input class="form-control me-2" style="width:100px;" type="search" name="query" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-light" type="submit">Search</button>
           <span class="btn btn-secondary text-white mx-3">'.$_SESSION['email'].'</span>
           <a href="/codewithharry/Forums-Php/partials/_logout.php" class="btn btn-success">Logout</a>

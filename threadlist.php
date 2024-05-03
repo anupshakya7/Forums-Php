@@ -14,49 +14,47 @@
 </head>
 
 <body>
-    <?php
-    include 'partials/_header.php';
-    ?>
+<?php include 'partials/_dbconnect.php' ?>
+<?php include 'partials/_header.php'; ?>
 
-    <?php include 'partials/_dbconnect.php' ?>
     <?php
     $id = $_GET['catid'];
-    $sql = "SELECT * FROM `categories` WHERE category_id=" . $id . "";
-    $result = mysqli_query($conn, $sql);
-    while ($row = mysqli_fetch_assoc($result)) {
-        $catname = $row['category_name'];
-        $catdesc = $row['category_description'];
-    }
-    ?>
+$sql = "SELECT * FROM `categories` WHERE category_id=" . $id . "";
+$result = mysqli_query($conn, $sql);
+while ($row = mysqli_fetch_assoc($result)) {
+    $catname = $row['category_name'];
+    $catdesc = $row['category_description'];
+}
+?>
 
     <?php
-    $showAlert = false;
-    $method = $_SERVER['REQUEST_METHOD'];
-    if ($method == 'POST') {
-        //Insert into thread into db
-        $th_title = $_POST['title'];
+$showAlert = false;
+$method = $_SERVER['REQUEST_METHOD'];
+if ($method == 'POST') {
+    //Insert into thread into db
+    $th_title = $_POST['title'];
 
-        $th_title = str_replace('<', '&lt;', $th_title);
-        $th_title = str_replace('>', '&gt;', $th_title);
+    $th_title = str_replace('<', '&lt;', $th_title);
+    $th_title = str_replace('>', '&gt;', $th_title);
 
-        $th_desc = $_POST['desc'];
+    $th_desc = $_POST['desc'];
 
-        $th_desc = str_replace('<', '&lt;', $th_desc);
-        $th_desc = str_replace('>', '&gt;', $th_desc);
+    $th_desc = str_replace('<', '&lt;', $th_desc);
+    $th_desc = str_replace('>', '&gt;', $th_desc);
 
-        $userId = $_POST['sno'];
+    $userId = $_POST['sno'];
 
-        $sql = "INSERT INTO `threads` (`thread_title`, `thread_desc`, `thread_cat_id`, `thread_user_id`, `created`) VALUES ('$th_title', '$th_desc', '$id', '$userId', current_timestamp())";
-        $result = mysqli_query($conn, $sql);
-        $showAlert = true;
-    }
+    $sql = "INSERT INTO `threads` (`thread_title`, `thread_desc`, `thread_cat_id`, `thread_user_id`, `created`) VALUES ('$th_title', '$th_desc', '$id', '$userId', current_timestamp())";
+    $result = mysqli_query($conn, $sql);
+    $showAlert = true;
+}
 
-    if ($showAlert) {
-        echo '<div class="alert alert-success" role="alert">
+if ($showAlert) {
+    echo '<div class="alert alert-success" role="alert">
         Your Thread has been Added! Please wait for community to respond
       </div>';
-    }
-    ?>
+}
+?>
 
     <!-- Category container starts here -->
     <div class="container my-3" id="ques">
@@ -68,8 +66,8 @@
             <button class="btn btn-success">Learn More</button>
         </div>
         <?php
-        if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
-            echo '<div class="container">
+    if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
+        echo '<div class="container">
             <h1 class="py-2">Start a Discussion</h1>
             <form action="'.$_SERVER['REQUEST_URI'].'" method="POST" class="card p-3">
                 <input type="hidden" name="sno" value="'.$_SESSION['user_id'].'">
@@ -89,34 +87,34 @@
                 <button type="submit" class="btn btn-success">Submit</button>
             </form>
         </div>';
-        } else {
-            echo "<h4 class='mt-4'>You are logged in. Please login to be able to start a Discussion</h4>";
-        }
-    ?>
+    } else {
+        echo "<h4 class='mt-4'>You are logged in. Please login to be able to start a Discussion</h4>";
+    }
+?>
     
         <h1 class="py-2 mt-4">Browser Question</h1>
         <?php
-    $id = $_GET['catid'];
-    $sql = "SELECT * FROM `threads` WHERE thread_cat_id=" . $id . "";
-    $result = mysqli_query($conn, $sql);
-    $noResult = true;
+$id = $_GET['catid'];
+$sql = "SELECT * FROM `threads` WHERE thread_cat_id=" . $id . "";
+$result = mysqli_query($conn, $sql);
+$noResult = true;
 
-    while ($row = mysqli_fetch_assoc($result)) {
-        $noResult = false;
-        $title = $row['thread_title'];
-        $desc = $row['thread_desc'];
+while ($row = mysqli_fetch_assoc($result)) {
+    $noResult = false;
+    $title = $row['thread_title'];
+    $desc = $row['thread_desc'];
 
-        $id = $row['thread_id'];
-        $thread_time = $row['created'];
-        $thread_user_id = $row['thread_user_id'];
+    $id = $row['thread_id'];
+    $thread_time = $row['created'];
+    $thread_user_id = $row['thread_user_id'];
 
-        $sql2 = "SELECT email FROM `users` WHERE sno='$thread_user_id'";
-        $result2 = mysqli_query($conn, $sql2);
-        $row2 = mysqli_fetch_assoc($result2);
+    $sql2 = "SELECT email FROM `users` WHERE sno='$thread_user_id'";
+    $result2 = mysqli_query($conn, $sql2);
+    $row2 = mysqli_fetch_assoc($result2);
 
 
 
-        echo '<div class="d-flex my-4">
+    echo '<div class="d-flex my-4">
         <div class="flex-shrink-0">
             <img src="images/userDefault.png" alt="..." width="44px" height="44px">
         </div>
@@ -127,22 +125,22 @@
         </div>
     </div>
     <hr>';
-    }
-    if ($noResult) {
-        echo '<div class="jumbotron jumbotron-fluid">
+}
+if ($noResult) {
+    echo '<div class="jumbotron jumbotron-fluid">
             <div class="container">
                 <p class="lead">Be the first person to ask a question</p>
             </div>
         </div>';
-    }
-    ?>
+}
+?>
 
 
     </div>
 
     <?php
-    include 'partials/_footer.php';
-    ?>
+include 'partials/_footer.php';
+?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 
